@@ -8,7 +8,7 @@ int main()
     {
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("Hello, Raylib!", 10, 10, 20, BLACK);
+        DrawText("Welcome gabi!", 10, 10, 20, BLACK);
         EndDrawing();
     }
     
