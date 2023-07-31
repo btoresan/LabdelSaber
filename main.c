@@ -1,3 +1,13 @@
+
+
+
+
+
+
+
+
+
+
 #include <raylib.h>
 
 int main()
@@ -8,7 +18,7 @@ int main()
     {
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        DrawText("Welcome gabi!", 10, 10, 20, BLACK);
+        DrawText("Wel come be", 10, 10, 20, BLACK);
         EndDrawing();
     }
     
