@@ -7,10 +7,18 @@ int run()
     switch (menu()) //roda o menu até que devolva qual funcao rodar
     {
         //opções do menu
-        case 1: 
+
+        //case 0: jogo
+
+        //case 1: carrega jogo
+
+        case 2: 
             scoreboard(); //carrega o scorboard
             break;
         
+        //case 3: inofrmacoes
+
+        //case 4: sair
     }
 
     return 0;
