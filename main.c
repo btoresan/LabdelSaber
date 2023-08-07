@@ -1,6 +1,6 @@
 #include <raylib.h>
-#include "functions/menu.h" //puxa as funções dos arquivos menu
-#include "functions/scoreboard.h" //
+#include "functions/menu.h" //funções dos arquivos menu
+#include "functions/scoreboard.h" //funções do scoreboard
 
 int run()
 {
