@@ -18,10 +18,10 @@ void drawmap (){
     // Main game loop
     while (!WindowShouldClose()) {
         BeginDrawing();
-        for (int i = 0; i < 60; i++){
-            for (int j = 0; j < 81; j++){
+        for (int i = 0; i < 30; i++){
+            for (int j = 0; j < 41; j++){
                 if(fgetc(mapa) == '1'){
-                    DrawRectangle(j*10, i*10, 8, 8, WHITE);
+                    DrawRectangle(j*20, i*20, 20, 20, WHITE);
                 }
             }
         }
@@ -116,6 +116,6 @@ void moveplayer (char grid[40][30], int *posx, int *posy){
 }
 
 int main (){
-    loadgame();
+    drawmap();
     return 0;
 }
