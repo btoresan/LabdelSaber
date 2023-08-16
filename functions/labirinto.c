@@ -54,7 +54,7 @@ void drawmap (){
     
     
     //Inicializacao da textura do player
-    player = LoadTexture("../sprites/aluno_frente.png");
+    player = LoadTexture("../static/sprites/aluno_frente.png");
     
    
     
