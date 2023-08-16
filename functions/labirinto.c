@@ -7,7 +7,7 @@ void drawmap (){
     const int screenHeight = 600;
     FILE *mapa;
     
-    mapa = fopen("mapa1.txt", "r");
+    mapa = fopen("../static/mapas/mapa1.txt", "r");
     
     //int grid [80][60] = {};
     
@@ -35,14 +35,45 @@ void drawmap (){
     CloseWindow();
 }
 
+void moveplayer (char grid[40][30], int *posx, int *posy){
+
+    if(IsKeyDown(KEY_W)){
+        grid[*posx][*posy] = 'o';
+        *posy -= 1;
+        grid[*posx][*posy] = 'p';
+    }
+
+    if(IsKeyDown(KEY_A)){
+        grid[*posx][*posy] = 'o';
+        *posx -= 1;
+        grid[*posx][*posy] = 'p';
+    }
+
+    if(IsKeyDown(KEY_S)){
+        grid[*posx][*posy] = 'o';
+        *posy += 1;
+        grid[*posx][*posy] = 'p';
+    }
+
+    if(IsKeyDown(KEY_D)){
+        grid[*posx][*posy] = 'o';
+        *posx += 1;
+        grid[*posx][*posy] = 'p';
+    }
+
+}
 
  int loadgame(){
     //Declaracao do Tamanho da tela 
     const int screenWidth = 800;
     const int screenHeight = 600;
+
     //Declaracao da Grid 20x menor que o tamanho da tela por sessao
     char grid[40][30] = {};
     //1 quadradoda grid = 20x20
+
+    //Declaracoes do mapa
+    Texture2D mapa;
     
     //Declaracoes do player
     int posx = 1;
@@ -55,15 +86,25 @@ void drawmap (){
     
     //Inicializacao da textura do player
     player = LoadTexture("../static/sprites/aluno_frente.png");
+    //Inicializacao da textura do mapa
+    mapa = LoadTexture("../static/mapas/mapa1.png");
+    
+
+    SetTargetFPS(20);
     
    
     
     while (!WindowShouldClose()){
         //Inicializa a Tela
         BeginDrawing();
+
+        //desenha o mapa
+        DrawTexture(mapa, 0, 0, WHITE);
+
+        moveplayer(grid, &posx, &posy);
         
         //Desenha o player
-        DrawTexture(player, posx, posy, WHITE);
+        DrawTexture(player, posx*20, posy*20, WHITE);
         
         ClearBackground(BLACK);
         
