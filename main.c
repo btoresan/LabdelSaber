@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include "functions/menu.c" //funções dos arquivos menu
 #include "functions/scoreboard.c" //funções do scoreboard
+#include "functions/labirinto.c"
 
 int run()
 {
@@ -8,7 +9,9 @@ int run()
     {
         //opções do menu
 
-        //case 0: jogo
+        case 0:
+            loadgame();
+            break;
 
         //case 1: carrega jogo
 

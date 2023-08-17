@@ -1,6 +1,17 @@
 #include <raylib.h>
 #include <stdio.h>
 
+typedef struct personagem{
+    int posx;
+    int posy;
+    Texture2D current;
+} personagem;
+
+
+
+
+
+
 void drawmap (){
      // Initialization
     const int screenWidth = 800;
@@ -35,33 +46,43 @@ void drawmap (){
     CloseWindow();
 }
 
-void moveplayer (char grid[40][30], int *posx, int *posy){
 
-    if(IsKeyDown(KEY_W)){
-        grid[*posx][*posy] = 'o';
-        *posy -= 1;
-        grid[*posx][*posy] = 'p';
+
+
+
+
+void moveplayer (char grid[41][30], personagem *aluno){
+
+    if(IsKeyDown(KEY_W) && grid[aluno->posx][aluno->posy - 1] != '1'){
+        grid[aluno->posy][aluno->posx] = '0';
+        aluno->posy -= 1;
+        grid[aluno->posx][aluno->posy] = 'p';
     }
 
-    if(IsKeyDown(KEY_A)){
-        grid[*posx][*posy] = 'o';
-        *posx -= 1;
-        grid[*posx][*posy] = 'p';
+    if(IsKeyDown(KEY_A) && grid[aluno->posx - 1][aluno->posy] != '1'){
+        grid[aluno->posx][aluno->posy] = '0';
+        aluno->posx -= 1;
+        grid[aluno->posx][aluno->posy] = 'p';
     }
 
-    if(IsKeyDown(KEY_S)){
-        grid[*posx][*posy] = 'o';
-        *posy += 1;
-        grid[*posx][*posy] = 'p';
+    if(IsKeyDown(KEY_S) && grid[aluno->posx][aluno->posy + 1] != '1'){
+        grid[aluno->posx][aluno->posy] = '0';
+        aluno->posy += 1;
+        grid[aluno->posx][aluno->posy] = 'p';
     }
 
-    if(IsKeyDown(KEY_D)){
-        grid[*posx][*posy] = 'o';
-        *posx += 1;
-        grid[*posx][*posy] = 'p';
+    if(IsKeyDown(KEY_D) && grid[aluno->posx + 1][aluno->posy] != '1'){
+        grid[aluno->posx][aluno->posy] = '0';
+        aluno->posx += 1;
+        grid[aluno->posx][aluno->posy] = 'p';
     }
 
 }
+
+
+
+
+
 
  int loadgame(){
     //Declaracao do Tamanho da tela 
@@ -69,30 +90,44 @@ void moveplayer (char grid[40][30], int *posx, int *posy){
     const int screenHeight = 600;
 
     //Declaracao da Grid 20x menor que o tamanho da tela por sessao
-    char grid[40][30] = {};
     //1 quadradoda grid = 20x20
+    char grid[41][30] = {};
 
     //Declaracoes do mapa
     Texture2D mapa;
+    FILE *mapaGrid;
     
     //Declaracoes do player
-    int posx = 1;
-    int posy = 1;
-    Texture2D player;
+    personagem aluno;
     
     //Inicializa a janela 
     InitWindow(screenWidth, screenHeight, "Labirinto Del Saber ALPHA");
     
     
     //Inicializacao da textura do player
-    player = LoadTexture("../static/sprites/aluno_frente.png");
-    //Inicializacao da textura do mapa
-    mapa = LoadTexture("../static/mapas/mapa1.png");
+    aluno.posx = 1;
+    aluno.posy = 1;
+    aluno.current = LoadTexture("static/sprites/aluno_frente.png");
     
-
+    
+    //Inicializacao da do mapa
+    mapa = LoadTexture("static/mapas/mapa1.png");
+    mapaGrid = fopen("static/mapas/mapa1.txt", "r");
+    
+    
+    //Inicializa cada coluna da grid com o mapa
+    for (int i = 0; i < 30; i++){
+        for (int j = 0; j < 41; j++){
+            fread(&grid[j][i], sizeof(char), 1, mapaGrid);      
+        }
+    }
+    
+    TraceLog(LOG_ERROR, "%s", grid);
+    
     SetTargetFPS(10);
     
-   
+   //Cleanup
+   fclose(mapaGrid);
     
     while (!WindowShouldClose()){
         //Inicializa a Tela
@@ -101,10 +136,11 @@ void moveplayer (char grid[40][30], int *posx, int *posy){
         //desenha o mapa
         DrawTexture(mapa, 0, 0, WHITE);
 
-        moveplayer(grid, &posx, &posy);
+        //move o aluno
+        moveplayer(grid, &aluno);
         
         //Desenha o player
-        DrawTexture(player, posx*20, posy*20, WHITE);
+        DrawTexture(aluno.current, aluno.posx*20, aluno.posy*20, WHITE);
         
         ClearBackground(BLACK);
         
@@ -112,10 +148,5 @@ void moveplayer (char grid[40][30], int *posx, int *posy){
         EndDrawing();
     }
     CloseWindow();
-    return 0;
-}
-
-int main (){
-    loadgame();
     return 0;
 }
