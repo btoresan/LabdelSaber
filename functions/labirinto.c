@@ -97,7 +97,6 @@ void moveplayer (char grid[41][30], personagem *aluno){
     char grid[41][30] = {};
 
     //Declaracoes do mapa
-    Texture2D mapa;
     FILE *mapaGrid;
     
     //Declaracoes do player
@@ -137,9 +136,6 @@ void moveplayer (char grid[41][30], personagem *aluno){
     while (!WindowShouldClose()){
         //Inicializa a Tela
         BeginDrawing();
-
-        //desenha o mapa
-        DrawTexture(mapa, 0, 0, WHITE);
 
         //move o aluno
         moveplayer(grid, &aluno);

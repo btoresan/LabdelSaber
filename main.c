@@ -1,7 +1,7 @@
 #include <raylib.h>
 #include "functions/menu.c" //funções dos arquivos menu
 #include "functions/scoreboard.c" //funções do scoreboard
-#include "functions/labirinto.c"
+#include "functions/labirinto.c" //funcoes do jogo em si
 
 int run()
 {
