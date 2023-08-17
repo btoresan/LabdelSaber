@@ -10,7 +10,7 @@ int run()
         //opções do menu
 
         case 0:
-            loadgame();
+            loadgame("static/mapas/mapa1.txt");
             break;
 
         //case 1: carrega jogo
