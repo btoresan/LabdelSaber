@@ -90,7 +90,7 @@ void moveplayer (char grid[40][30], int *posx, int *posy){
     mapa = LoadTexture("../static/mapas/mapa1.png");
     
 
-    SetTargetFPS(20);
+    SetTargetFPS(10);
     
    
     
@@ -116,6 +116,6 @@ void moveplayer (char grid[40][30], int *posx, int *posy){
 }
 
 int main (){
-    drawmap();
+    loadgame();
     return 0;
 }
