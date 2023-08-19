@@ -114,7 +114,7 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
     
     // Perseguição professor
     
-    if (distancia<=10) // Se o professor estiver próximo do aluno, inicia a perseguição
+    if (distancia<=6) // Se o professor estiver próximo do aluno, inicia a perseguição
     {
         float dist_x = posxal - professor->posxp; // Calcula a distancia em relação ao x entre o aluno e o professor
         float dist_y = posyal - professor->posyp; // Calcula a distancia em relação ao y entre o aluno e o professor
