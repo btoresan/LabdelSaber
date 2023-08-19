@@ -114,79 +114,76 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
     
     // Perseguição professor
     
-    if (distancia<=5) // Se o professor estiver próximo do aluno, inicia a perseguição
+    if (distancia<=10) // Se o professor estiver próximo do aluno, inicia a perseguição
     {
-        while (distancia!=0)
+        float dist_x = posxal - professor->posxp; // Calcula a distancia em relação ao x entre o aluno e o professor
+        float dist_y = posyal - professor->posyp; // Calcula a distancia em relação ao y entre o aluno e o professor
+            
+        if (fabs(dist_x) >= fabs(dist_y)) // Se o valor absoluto da distancia em relação ao x for maior ou igual, o professor se move pelo eixo x
         {
-            float dist_x = posxal - professor->posxp; // Calcula a distancia em relação ao x entre o aluno e o professor
-            float dist_y = posyal - professor->posyp; // Calcula a distancia em relação ao y entre o aluno e o professor
-            
-            if (fabs(dist_x) >= fabs(dist_y)) // Se o valor absoluto da distancia em relação ao x for maior ou igual, o professor se move pelo eixo x
+            if (dist_x < 0) // Se a dist_x for negativa, o professor está à direita do aluno
             {
-                if (dist_x < 0) // Se a dist_x for negativa, o professor está à direita do aluno
+                if(grid[professor->posxp-1][professor->posyp] != '1')
                 {
-                    if(grid[professor->posxp-1][professor->posyp] != '1')
-                    {
-                        //Move o professor na grid           
-                        grid[professor->posxp][professor->posyp] = '0';
-                        professor->posxp -=1;
-                        grid[professor->posxp][professor->posyp] = 't';
-                        
-                        //Atualiza o sprite do professor
-                        professor->currentp = professor->esquerdap;
-                    }    
-                }
-                
-                else // Senão, o professor está à esquerda do aluno
-                {
-                    if(grid[professor->posxp+1][professor->posyp] != '1')
-                    {
-                        //Move o professor na grid           
-                        grid[professor->posxp][professor->posyp] = '0';
-                        professor->posxp +=1;
-                        grid[professor->posxp][professor->posyp] = 't';
-                        
-                        //Atualiza o sprite do professor
-                        professor->currentp = professor->direitap;
-                    }  
-                }  
-            }
-            
-            else // Senão, o professor se move pelo eixo y
-            {
-                if (dist_y<0) // Se a dist_y for negativa, o professor está abaixo do aluno
-                {
-                    
-                    if(grid[professor->posxp][professor->posyp - 1] != '1'){
-            
                     //Move o professor na grid           
                     grid[professor->posxp][professor->posyp] = '0';
-                    professor->posyp -=1;
-                    grid[professor->posxp][professor->posyp] = 't';             
-           
-                    //Atualiza o sprite do professor
-                    professor->currentp = professor->trasp;
-                    }    
-                }
-                
-                else  // Senão, etá acima do aluno
-                {
-                    if(grid[professor->posxp][professor->posyp + 1] != '1'){
-            
-                    //Move o professor na grid           
-                    grid[professor->posxp][professor->posyp] = '0';
-                    professor->posyp +=1;
+                    professor->posxp -=1;
                     grid[professor->posxp][professor->posyp] = 't';
-            
+                        
                     //Atualiza o sprite do professor
-                    professor->currentp = professor->frentep;
-                    }   
+                    professor->currentp = professor->esquerdap;
                 }    
-            } 
+            }
+                
+            else // Senão, o professor está à esquerda do aluno
+            {
+                if(grid[professor->posxp+1][professor->posyp] != '1')
+                {
+                    //Move o professor na grid           
+                    grid[professor->posxp][professor->posyp] = '0';
+                    professor->posxp +=1;
+                    grid[professor->posxp][professor->posyp] = 't';
+                        
+                    //Atualiza o sprite do professor
+                    professor->currentp = professor->direitap;
+                }  
+            }  
+        }
             
-            distancia = sqrt(pow(posxal - professor->posxp, 2) + pow(posyal - professor->posyp, 2));
-        }  
+        else // Senão, o professor se move pelo eixo y
+        {
+            if (dist_y<0) // Se a dist_y for negativa, o professor está abaixo do aluno
+            {
+                    
+                if(grid[professor->posxp][professor->posyp - 1] != '1'){
+            
+                //Move o professor na grid           
+                grid[professor->posxp][professor->posyp] = '0';
+                professor->posyp -=1;
+                grid[professor->posxp][professor->posyp] = 't';             
+           
+                //Atualiza o sprite do professor
+                professor->currentp = professor->trasp;
+                }    
+            }
+                
+            else  // Senão, etá acima do aluno
+            {
+                if(grid[professor->posxp][professor->posyp + 1] != '1'){
+            
+                //Move o professor na grid           
+                grid[professor->posxp][professor->posyp] = '0';
+                professor->posyp +=1;
+                grid[professor->posxp][professor->posyp] = 't';
+            
+                //Atualiza o sprite do professor
+                professor->currentp = professor->frentep;
+                }   
+            }    
+        } 
     }
+   
+    
     
     
     // Movimentação aleatória do professor
@@ -298,6 +295,7 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
         }
     }
 }
+
 
 
 
