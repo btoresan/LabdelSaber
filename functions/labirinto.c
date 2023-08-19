@@ -56,7 +56,7 @@ void drawGrid (char grid[41][30], Texture2D aluno, Texture2D professor){
 
 void moveplayer (char grid[41][30], personagem *aluno){
 
-    if(IsKeyDown(KEY_W) && grid[aluno->posx][aluno->posy - 1] != '1'){
+    if(IsKeyDown(KEY_UP) && grid[aluno->posx][aluno->posy - 1] != '1'){
         
         //Move o aluno na grid
         grid[aluno->posx][aluno->posy] = '0';
@@ -67,7 +67,7 @@ void moveplayer (char grid[41][30], personagem *aluno){
         aluno->current = aluno->tras;
     }
 
-    if(IsKeyDown(KEY_A) && grid[aluno->posx - 1][aluno->posy] != '1'){
+    if(IsKeyDown(KEY_LEFT) && grid[aluno->posx - 1][aluno->posy] != '1'){
         
         //Move o aluno na grid
         grid[aluno->posx][aluno->posy] = '0';
@@ -78,7 +78,7 @@ void moveplayer (char grid[41][30], personagem *aluno){
         aluno->current = aluno->esquerda;
     }
 
-    if(IsKeyDown(KEY_S) && grid[aluno->posx][aluno->posy + 1] != '1'){
+    if(IsKeyDown(KEY_DOWN) && grid[aluno->posx][aluno->posy + 1] != '1'){
         
         //Move o Aluno na Grid
         grid[aluno->posx][aluno->posy] = '0';
@@ -89,7 +89,7 @@ void moveplayer (char grid[41][30], personagem *aluno){
         aluno->current = aluno->frente;
     }
 
-    if(IsKeyDown(KEY_D) && grid[aluno->posx + 1][aluno->posy] != '1'){
+    if(IsKeyDown(KEY_RIGHT) && grid[aluno->posx + 1][aluno->posy] != '1'){
         
         //Move o Aluno na Grid
         grid[aluno->posx][aluno->posy] = '0';
@@ -114,7 +114,7 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
     
     // Perseguição professor
     
-    if (distancia<=6) // Se o professor estiver próximo do aluno, inicia a perseguição
+    if (distancia<=8) // Se o professor estiver próximo do aluno, inicia a perseguição
     {
         float dist_x = posxal - professor->posxp; // Calcula a distancia em relação ao x entre o aluno e o professor
         float dist_y = posyal - professor->posyp; // Calcula a distancia em relação ao y entre o aluno e o professor
