@@ -1,6 +1,8 @@
 #include <raylib.h>
 #include <stdio.h>
 
+
+// Estrutura personagem
 typedef struct personagem{
     int posx;
     int posy;
@@ -11,10 +13,23 @@ typedef struct personagem{
     Texture2D esquerda;
 } personagem;
 
+// Estrutura professor
+typedef struct {
+    int posxp;
+    int posyp;
+    Texture2D currentp;
+    Texture2D frentep;
+    Texture2D trasp;
+    Texture2D direitap;
+    Texture2D esquerdap;
+} PROFESSOR;
 
 
 
-void drawGrid (char grid[41][30], Texture2D aluno){
+
+
+
+void drawGrid (char grid[41][30], Texture2D aluno, Texture2D professor){
     //para cada quadrado da grid
     for (int i = 0; i < 41; i++){
         for (int j = 0; j < 30; j++){
@@ -22,6 +37,9 @@ void drawGrid (char grid[41][30], Texture2D aluno){
             //desenha o tipo do objeto no quadrado
             if (grid[i][j] == 'p')
                 DrawTexture(aluno, i*20, j*20, WHITE);
+            
+            else if (grid[i][j] == 't')
+                DrawTexture(professor, i*20, j*20, WHITE);
             
             else if (grid[i][j] == '1')
                 DrawRectangle(20*i, 20*j, 20, 20, WHITE);
@@ -84,6 +102,118 @@ void moveplayer (char grid[41][30], personagem *aluno){
 }
 
 
+void moveprof (char grid[41][30], PROFESSOR *professor){
+           
+    int cont=0;
+    int tem_parede = 0;
+    
+    
+    //Movimentação do professor de acordo com um valor aleatório de 0 a 3
+    
+    int random_direction = GetRandomValue(0,3); // 0 = tras; 1= frente; 2= direita; 3 = esquerda
+    
+    if (random_direction == 0) //tras
+    {
+        
+        while (cont<2 && tem_parede ==0) //Movimenta 2 vezes se não encontrar nenhuma parede
+        {
+            if(grid[professor->posxp][professor->posyp - 1] != '1'){
+            
+                //Move o professor na grid           
+                grid[professor->posxp][professor->posyp] = '0';
+                professor->posyp -=1;
+                grid[professor->posxp][professor->posyp] = 't';             
+           
+                //Atualiza o sprite do professor
+                professor->currentp = professor->trasp;
+                
+                
+                if(grid[professor->posxp][professor->posyp - 1] == '1')
+                    tem_parede=1; // flag parede
+                cont++;
+            }
+            else
+                tem_parede=1;
+            
+        }
+    }
+    
+    else if (random_direction == 1) //frente
+    {
+        
+        while (cont<2 && tem_parede ==0) 
+        {
+        
+            if(grid[professor->posxp][professor->posyp + 1] != '1'){
+            
+                //Move o professor na grid           
+                grid[professor->posxp][professor->posyp] = '0';
+                professor->posyp +=1;
+                grid[professor->posxp][professor->posyp] = 't';
+            
+                //Atualiza o sprite do professor
+                professor->currentp = professor->frentep;
+                
+                if(grid[professor->posxp][professor->posyp + 1] == '1')
+                    tem_parede=1;
+                cont++;
+            }
+            else
+                tem_parede=1;
+        }
+    }
+    
+    else if (random_direction == 2) //direita
+    {       
+        while (cont<2 && tem_parede ==0) 
+        {          
+            if(grid[professor->posxp+1][professor->posyp] != '1'){
+            
+                //Move o professor na grid           
+                grid[professor->posxp][professor->posyp] = '0';
+                professor->posxp +=1;
+                grid[professor->posxp][professor->posyp] = 't';
+            
+                //Atualiza o sprite do professor
+                professor->currentp = professor->direitap;
+                
+                if(grid[professor->posxp+1][professor->posyp] == '1')
+                    tem_parede=1;
+                cont++;           
+            }
+            
+            else
+                tem_parede=1;
+        }
+    }
+    
+    else if (random_direction == 3) //esquerda
+    {
+        while (cont<2 && tem_parede ==0) 
+        {
+        
+            if(grid[professor->posxp-1][professor->posyp] != '1'){
+            
+                //Move o professor na grid           
+                grid[professor->posxp][professor->posyp] = '0';
+                professor->posxp -=1;
+                grid[professor->posxp][professor->posyp] = 't';
+            
+                //Atualiza o sprite do professor
+                professor->currentp = professor->esquerdap;
+                
+                if(grid[professor->posxp-1][professor->posyp] == '1')
+                    tem_parede=1;
+                cont++;            
+            }
+            else
+                tem_parede=1;
+        }   
+
+    }
+}
+
+
 
 
 
@@ -98,6 +228,9 @@ void moveplayer (char grid[41][30], personagem *aluno){
 
     //Declaracoes do mapa
     FILE *mapaGrid;
+    
+    //Declaração professor
+    PROFESSOR professor;
     
     //Declaracoes do player
     personagem aluno;
@@ -115,6 +248,18 @@ void moveplayer (char grid[41][30], personagem *aluno){
     aluno.tras = LoadTexture("static/sprites/aluno_tras.png");
     aluno.esquerda = LoadTexture("static/sprites/aluno_esquerda.png");
     aluno.direita = LoadTexture("static/sprites/aluno_direita.png");
+    
+    
+    //Inicializacao da textura e posição do professor
+    
+    professor.posxp = 10;
+    professor.posyp = 10;
+    professor.currentp = LoadTexture("static/sprites/professor-frente.png");
+    
+    professor.frentep = LoadTexture("static/sprites/professor-frente.png");
+    professor.trasp = LoadTexture("static/sprites/professor-costas.png");
+    professor.direitap = LoadTexture("static/sprites/professor-direita.png");
+    professor.esquerdap = LoadTexture("static/sprites/professor-esquerda.png");
     
     
     //Inicializacao da do mapa
@@ -140,9 +285,12 @@ void moveplayer (char grid[41][30], personagem *aluno){
         //move o aluno
         moveplayer(grid, &aluno);
         
-        //Desenha o player
-        drawGrid(grid, aluno.current);
-        //DrawTexture(aluno.current, aluno.posx*20, aluno.posy*20, WHITE);
+        //move o professor
+        moveprof(grid, &professor);
+        
+        //Desenha o player e o profeesor
+        drawGrid(grid, aluno.current,professor.currentp);
+        
         
         ClearBackground(BLACK);
         
