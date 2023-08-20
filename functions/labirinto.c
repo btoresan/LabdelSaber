@@ -14,18 +14,6 @@ typedef struct personagem{
     Texture2D esquerda;
 } personagem;
 
-// Estrutura professor
-typedef struct {
-    int posxp;
-    int posyp;
-    Texture2D currentp;
-    Texture2D frentep;
-    Texture2D trasp;
-    Texture2D direitap;
-    Texture2D esquerdap;
-} PROFESSOR;
-
-
 
 
 
@@ -103,49 +91,52 @@ void moveplayer (char grid[41][30], personagem *aluno){
 }
 
 
-void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
+
+
+
+void moveprof (char grid[41][30], personagem *professor, int posxal, int posyal){
            
     int cont=0;
     int tem_parede = 0;
     
     // Calcula a distancia entre o professor e o aluno
-    float distancia = sqrt(pow(posxal - professor->posxp, 2) + pow(posyal - professor->posyp, 2));
+    float distancia = sqrt(pow(posxal - professor->posx, 2) + pow(posyal - professor->posy, 2));
     
     
     // Perseguição professor
     
     if (distancia<=8) // Se o professor estiver próximo do aluno, inicia a perseguição
     {
-        float dist_x = posxal - professor->posxp; // Calcula a distancia em relação ao x entre o aluno e o professor
-        float dist_y = posyal - professor->posyp; // Calcula a distancia em relação ao y entre o aluno e o professor
+        float dist_x = posxal - professor->posx; // Calcula a distancia em relação ao x entre o aluno e o professor
+        float dist_y = posyal - professor->posy; // Calcula a distancia em relação ao y entre o aluno e o professor
             
         if (fabs(dist_x) >= fabs(dist_y)) // Se o valor absoluto da distancia em relação ao x for maior ou igual, o professor se move pelo eixo x
         {
             if (dist_x < 0) // Se a dist_x for negativa, o professor está à direita do aluno
             {
-                if(grid[professor->posxp-1][professor->posyp] != '1')
+                if(grid[professor->posx-1][professor->posy] != '1')
                 {
                     //Move o professor na grid           
-                    grid[professor->posxp][professor->posyp] = '0';
-                    professor->posxp -=1;
-                    grid[professor->posxp][professor->posyp] = 't';
+                    grid[professor->posx][professor->posy] = '0';
+                    professor->posx -=1;
+                    grid[professor->posx][professor->posy] = 't';
                         
                     //Atualiza o sprite do professor
-                    professor->currentp = professor->esquerdap;
+                    professor->current = professor->esquerda;
                 }    
             }
                 
             else // Senão, o professor está à esquerda do aluno
             {
-                if(grid[professor->posxp+1][professor->posyp] != '1')
+                if(grid[professor->posx+1][professor->posy] != '1')
                 {
                     //Move o professor na grid           
-                    grid[professor->posxp][professor->posyp] = '0';
-                    professor->posxp +=1;
-                    grid[professor->posxp][professor->posyp] = 't';
+                    grid[professor->posx][professor->posy] = '0';
+                    professor->posx +=1;
+                    grid[professor->posx][professor->posy] = 't';
                         
                     //Atualiza o sprite do professor
-                    professor->currentp = professor->direitap;
+                    professor->current = professor->direita;
                 }  
             }  
         }
@@ -155,29 +146,29 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
             if (dist_y<0) // Se a dist_y for negativa, o professor está abaixo do aluno
             {
                     
-                if(grid[professor->posxp][professor->posyp - 1] != '1'){
+                if(grid[professor->posx][professor->posy - 1] != '1'){
             
                 //Move o professor na grid           
-                grid[professor->posxp][professor->posyp] = '0';
-                professor->posyp -=1;
-                grid[professor->posxp][professor->posyp] = 't';             
+                grid[professor->posx][professor->posy] = '0';
+                professor->posy -=1;
+                grid[professor->posx][professor->posy] = 't';             
            
                 //Atualiza o sprite do professor
-                professor->currentp = professor->trasp;
+                professor->current = professor->tras;
                 }    
             }
                 
             else  // Senão, etá acima do aluno
             {
-                if(grid[professor->posxp][professor->posyp + 1] != '1'){
+                if(grid[professor->posx][professor->posy + 1] != '1'){
             
                 //Move o professor na grid           
-                grid[professor->posxp][professor->posyp] = '0';
-                professor->posyp +=1;
-                grid[professor->posxp][professor->posyp] = 't';
+                grid[professor->posx][professor->posy] = '0';
+                professor->posy +=1;
+                grid[professor->posx][professor->posy] = 't';
             
                 //Atualiza o sprite do professor
-                professor->currentp = professor->frentep;
+                professor->current = professor->frente;
                 }   
             }    
         } 
@@ -188,7 +179,7 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
     
     // Movimentação aleatória do professor
     
-    else
+    else if (GetRandomValue(0, 2) == 1)
     {
         //Movimentação do professor de acordo com um valor aleatório de 0 a 3
     
@@ -199,18 +190,18 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
         
             while (cont<1 && tem_parede ==0) //Movimenta 2 vezes se não encontrar nenhuma parede
             {
-                if(grid[professor->posxp][professor->posyp - 1] != '1'){
+                if(grid[professor->posx][professor->posy - 1] != '1'){
             
                     //Move o professor na grid           
-                    grid[professor->posxp][professor->posyp] = '0';
-                    professor->posyp -=1;
-                    grid[professor->posxp][professor->posyp] = 't';             
+                    grid[professor->posx][professor->posy] = '0';
+                    professor->posy -=1;
+                    grid[professor->posx][professor->posy] = 't';             
            
                     //Atualiza o sprite do professor
-                    professor->currentp = professor->trasp;
+                    professor->current = professor->tras;
                 
                 
-                    if(grid[professor->posxp][professor->posyp - 1] == '1')
+                    if(grid[professor->posx][professor->posy - 1] == '1')
                         tem_parede=1; // flag parede
                     cont++;
                 }
@@ -226,17 +217,17 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
             while (cont<1 && tem_parede ==0) 
             {
         
-                if(grid[professor->posxp][professor->posyp + 1] != '1'){
+                if(grid[professor->posx][professor->posy + 1] != '1'){
             
                     //Move o professor na grid           
-                    grid[professor->posxp][professor->posyp] = '0';
-                    professor->posyp +=1;
-                    grid[professor->posxp][professor->posyp] = 't';
+                    grid[professor->posx][professor->posy] = '0';
+                    professor->posy +=1;
+                    grid[professor->posx][professor->posy] = 't';
             
                     //Atualiza o sprite do professor
-                    professor->currentp = professor->frentep;
+                    professor->current = professor->frente;
                 
-                    if(grid[professor->posxp][professor->posyp + 1] == '1')
+                    if(grid[professor->posx][professor->posy + 1] == '1')
                         tem_parede=1;
                     cont++;
                 }
@@ -249,17 +240,17 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
         {       
             while (cont<1 && tem_parede ==0) 
             {          
-                if(grid[professor->posxp+1][professor->posyp] != '1'){
+                if(grid[professor->posx+1][professor->posy] != '1'){
             
                     //Move o professor na grid           
-                    grid[professor->posxp][professor->posyp] = '0';
-                    professor->posxp +=1;
-                    grid[professor->posxp][professor->posyp] = 't';
+                    grid[professor->posx][professor->posy] = '0';
+                    professor->posx +=1;
+                    grid[professor->posx][professor->posy] = 't';
             
                     //Atualiza o sprite do professor
-                    professor->currentp = professor->direitap;
+                    professor->current = professor->direita;
                 
-                    if(grid[professor->posxp+1][professor->posyp] == '1')
+                    if(grid[professor->posx+1][professor->posy] == '1')
                         tem_parede=1;
                     cont++;           
                 }
@@ -274,17 +265,17 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
             while (cont<1 && tem_parede ==0) 
             {
         
-                if(grid[professor->posxp-1][professor->posyp] != '1'){
+                if(grid[professor->posx-1][professor->posy] != '1'){
             
                     //Move o professor na grid           
-                    grid[professor->posxp][professor->posyp] = '0';
-                    professor->posxp -=1;
-                    grid[professor->posxp][professor->posyp] = 't';
+                    grid[professor->posx][professor->posy] = '0';
+                    professor->posx -=1;
+                    grid[professor->posx][professor->posy] = 't';
             
                     //Atualiza o sprite do professor
-                    professor->currentp = professor->esquerdap;
+                    professor->current = professor->esquerda;
                 
-                    if(grid[professor->posxp-1][professor->posyp] == '1')
+                    if(grid[professor->posx-1][professor->posy] == '1')
                         tem_parede=1;
                     cont++;            
                 }
@@ -295,7 +286,6 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
         }
     }
 }
-
 
 
 
@@ -314,7 +304,7 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
     FILE *mapaGrid;
     
     //Declaração professor
-    PROFESSOR professor;
+    personagem professor;
     
     //Declaracoes do player
     personagem aluno;
@@ -336,14 +326,14 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
     
     //Inicializacao da textura e posição do professor
     
-    professor.posxp = 10;
-    professor.posyp = 10;
-    professor.currentp = LoadTexture("static/sprites/professor-frente.png");
+    professor.posx = 10;
+    professor.posy = 10;
+    professor.current = LoadTexture("static/sprites/professor-frente.png");
     
-    professor.frentep = LoadTexture("static/sprites/professor-frente.png");
-    professor.trasp = LoadTexture("static/sprites/professor-costas.png");
-    professor.direitap = LoadTexture("static/sprites/professor-direita.png");
-    professor.esquerdap = LoadTexture("static/sprites/professor-esquerda.png");
+    professor.frente = LoadTexture("static/sprites/professor-frente.png");
+    professor.tras = LoadTexture("static/sprites/professor-costas.png");
+    professor.direita = LoadTexture("static/sprites/professor-direita.png");
+    professor.esquerda = LoadTexture("static/sprites/professor-esquerda.png");
     
     
     //Inicializacao da do mapa
@@ -373,7 +363,7 @@ void moveprof (char grid[41][30], PROFESSOR *professor, int posxal, int posyal){
         moveprof(grid, &professor, aluno.posx, aluno.posy);
         
         //Desenha o player e o profeesor
-        drawGrid(grid, aluno.current,professor.currentp);
+        drawGrid(grid, aluno.current,professor.current);
         
         
         ClearBackground(BLACK);
