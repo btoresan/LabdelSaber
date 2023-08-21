@@ -18,14 +18,18 @@ typedef struct personagem{
 
 
 
-void drawGrid (char grid[41][30], Texture2D aluno, Texture2D professor){
+void drawGrid (char grid[101][100], personagem *aluno, Texture2D professor){
+    int metade = 0;
+    
+    if (aluno->posx > 50)
+        metade = 30;
+    
     //para cada quadrado da grid
-    for (int i = 0; i < 41; i++){
-        for (int j = 0; j < 30; j++){
-            
+    for (int i = metade; i < metade + 70; i++){
+        for (int j = 0; j < 100; j++){
             //desenha o tipo do objeto no quadrado
             if (grid[i][j] == 'p')
-                DrawTexture(aluno, i*20, j*20, WHITE);
+                DrawTexture(aluno->current, i*20, j*20, WHITE);
             
             else if (grid[i][j] == 't')
                 DrawTexture(professor, i*20, j*20, WHITE);
@@ -42,7 +46,7 @@ void drawGrid (char grid[41][30], Texture2D aluno, Texture2D professor){
 
 
 
-void moveplayer (char grid[41][30], personagem *aluno){
+void moveplayer (char grid[101][100], personagem *aluno){
 
     if(IsKeyDown(KEY_UP) && grid[aluno->posx][aluno->posy - 1] != '1'){
         
@@ -94,7 +98,7 @@ void moveplayer (char grid[41][30], personagem *aluno){
 
 
 
-void moveprof (char grid[41][30], personagem *professor, int posxal, int posyal){
+void moveprof (char grid[101][100], personagem *professor, int posxal, int posyal){
            
     int cont=0;
     int tem_parede = 0;
@@ -298,7 +302,7 @@ void moveprof (char grid[41][30], personagem *professor, int posxal, int posyal)
 
     //Declaracao da Grid 20x menor que o tamanho da tela por sessao
     //1 quadradoda grid = 20x20
-    char grid[41][30] = {};
+    char grid[101][100] = {};
 
     //Declaracoes do mapa
     FILE *mapaGrid;
@@ -308,6 +312,13 @@ void moveprof (char grid[41][30], personagem *professor, int posxal, int posyal)
     
     //Declaracoes do player
     personagem aluno;
+    
+    //declaracoes da camera;
+    Camera2D camera = { 0 };
+    camera.target = (Vector2){400, 300};
+    camera.offset = (Vector2){400, 300};
+    camera.rotation = 0.0f;
+    camera.zoom = 1.0f;
     
     //Inicializa a janela 
     InitWindow(screenWidth, screenHeight, "Labirinto Del Saber ALPHA");
@@ -341,8 +352,8 @@ void moveprof (char grid[41][30], personagem *professor, int posxal, int posyal)
     
     
     //Inicializa cada coluna da grid com o mapa
-    for (int i = 0; i < 30; i++){
-        for (int j = 0; j < 41; j++){
+    for (int i = 0; i < 100; i++){
+        for (int j = 0; j < 101; j++){
             fread(&grid[j][i], sizeof(char), 1, mapaGrid);      
         }
     }
@@ -353,22 +364,37 @@ void moveprof (char grid[41][30], personagem *professor, int posxal, int posyal)
    fclose(mapaGrid);
     
     while (!WindowShouldClose()){
+        
+        //atualiza o valor da camera
+        camera.target = (Vector2){aluno.posx * 20, aluno.posy * 20};
+        
+        
         //Inicializa a Tela
         BeginDrawing();
 
-        //move o aluno
+        
+        BeginMode2D(camera);
+
+
+       //move o aluno
         moveplayer(grid, &aluno);
+
         
         //move o professor
         moveprof(grid, &professor, aluno.posx, aluno.posy);
+
         
         //Desenha o player e o profeesor
-        drawGrid(grid, aluno.current,professor.current);
+        drawGrid(grid, &aluno, professor.current);
         
         
+        //Fundo Preto
         ClearBackground(BLACK);
         
+        
+        
         //Cleanup
+        EndMode2D();
         EndDrawing();
     }
     CloseWindow();
