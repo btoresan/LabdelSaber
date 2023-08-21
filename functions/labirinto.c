@@ -4,7 +4,7 @@
 
 
 // Estrutura personagem
-typedef struct personagem{
+typedef struct {
     int posx;
     int posy;
     Texture2D current;
@@ -12,21 +12,26 @@ typedef struct personagem{
     Texture2D tras;
     Texture2D direita;
     Texture2D esquerda;
-} personagem;
+} PERSONAGEM;
 
 
 
 
 
-void drawGrid (char grid[101][100], personagem *aluno, Texture2D professor){
-    int metade = 0;
+void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor){
+    //variaveis para carregar o apenas o qudrante certo
+    //de forma fluida
+    int metadex = 0;
+    int metadey = 0;
     
     if (aluno->posx > 50)
-        metade = 30;
+        metadex = 30;
+    if (aluno->posy > 50)
+        metadey = 30;
     
     //para cada quadrado da grid
-    for (int i = metade; i < metade + 70; i++){
-        for (int j = 0; j < 100; j++){
+    for (int i = metadex; i < metadex + 70; i++){
+        for (int j = metadey; j < metadey + 70; j++){
             //desenha o tipo do objeto no quadrado
             if (grid[i][j] == 'p')
                 DrawTexture(aluno->current, i*20, j*20, WHITE);
@@ -46,7 +51,7 @@ void drawGrid (char grid[101][100], personagem *aluno, Texture2D professor){
 
 
 
-void moveplayer (char grid[101][100], personagem *aluno){
+void moveplayer (char grid[101][100], PERSONAGEM *aluno){
 
     if(IsKeyDown(KEY_UP) && grid[aluno->posx][aluno->posy - 1] != '1'){
         
@@ -98,7 +103,7 @@ void moveplayer (char grid[101][100], personagem *aluno){
 
 
 
-void moveprof (char grid[101][100], personagem *professor, int posxal, int posyal){
+void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posyal){
            
     int cont=0;
     int tem_parede = 0;
@@ -308,10 +313,10 @@ void moveprof (char grid[101][100], personagem *professor, int posxal, int posya
     FILE *mapaGrid;
     
     //Declaração professor
-    personagem professor;
+    PERSONAGEM professor;
     
     //Declaracoes do player
-    personagem aluno;
+    PERSONAGEM aluno;
     
     //declaracoes da camera;
     Camera2D camera = { 0 };
@@ -365,7 +370,7 @@ void moveprof (char grid[101][100], personagem *professor, int posxal, int posya
     
     while (!WindowShouldClose()){
         
-        //atualiza o valor da camera
+        //Atualiza o valor da camera
         camera.target = (Vector2){aluno.posx * 20, aluno.posy * 20};
         
         
@@ -373,6 +378,7 @@ void moveprof (char grid[101][100], personagem *professor, int posxal, int posya
         BeginDrawing();
 
         
+        //Inicializa a camera 2D
         BeginMode2D(camera);
 
 
@@ -390,7 +396,6 @@ void moveprof (char grid[101][100], personagem *professor, int posxal, int posya
         
         //Fundo Preto
         ClearBackground(BLACK);
-        
         
         
         //Cleanup
