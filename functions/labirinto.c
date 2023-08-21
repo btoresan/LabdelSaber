@@ -64,7 +64,7 @@ void moveplayer (char grid[101][100], PERSONAGEM *aluno){
         aluno->current = aluno->tras;
     }
 
-    if(IsKeyDown(KEY_LEFT) && grid[aluno->posx - 1][aluno->posy] != '1'){
+    else if(IsKeyDown(KEY_LEFT) && grid[aluno->posx - 1][aluno->posy] != '1'){
         
         //Move o aluno na grid
         grid[aluno->posx][aluno->posy] = '0';
@@ -75,7 +75,7 @@ void moveplayer (char grid[101][100], PERSONAGEM *aluno){
         aluno->current = aluno->esquerda;
     }
 
-    if(IsKeyDown(KEY_DOWN) && grid[aluno->posx][aluno->posy + 1] != '1'){
+    else if(IsKeyDown(KEY_DOWN) && grid[aluno->posx][aluno->posy + 1] != '1'){
         
         //Move o Aluno na Grid
         grid[aluno->posx][aluno->posy] = '0';
@@ -86,7 +86,7 @@ void moveplayer (char grid[101][100], PERSONAGEM *aluno){
         aluno->current = aluno->frente;
     }
 
-    if(IsKeyDown(KEY_RIGHT) && grid[aluno->posx + 1][aluno->posy] != '1'){
+    else if(IsKeyDown(KEY_RIGHT) && grid[aluno->posx + 1][aluno->posy] != '1'){
         
         //Move o Aluno na Grid
         grid[aluno->posx][aluno->posy] = '0';
