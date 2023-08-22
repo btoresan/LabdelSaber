@@ -1,7 +1,8 @@
 #include <raylib.h>
 #include "functions/menu.c" //funções dos arquivos menu
 #include "functions/scoreboard.c" //funções do scoreboard
-#include "functions/labirinto.c" //funcoes do jogo em si
+#include "functions/jogo.c"
+
 
 int run()
 {
@@ -10,7 +11,7 @@ int run()
         //opções do menu
 
         case 0:
-            loadgame("static/mapas/mapa1.txt");
+            jogo("static/mapas/mapa1.txt", 1, 1, 1, 30);
             break;
 
         //case 1: carrega jogo

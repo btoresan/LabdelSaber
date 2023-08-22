@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <math.h>
 
-
 // Estrutura personagem
 typedef struct {
     int posx;
@@ -13,8 +12,6 @@ typedef struct {
     Texture2D direita;
     Texture2D esquerda;
 } PERSONAGEM;
-
-
 
 
 
@@ -123,7 +120,7 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
         {
             if (dist_x < 0) // Se a dist_x for negativa, o professor está à direita do aluno
             {
-                if(grid[professor->posx-1][professor->posy] != '1')
+                if(grid[professor->posx-1][professor->posy] != '1' && grid[professor->posx-1][professor->posy] != 'p')
                 {
                     //Move o professor na grid           
                     grid[professor->posx][professor->posy] = '0';
@@ -137,7 +134,7 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
                 
             else // Senão, o professor está à esquerda do aluno
             {
-                if(grid[professor->posx+1][professor->posy] != '1')
+                if(grid[professor->posx+1][professor->posy] != '1'&& grid[professor->posx+1][professor->posy] != 'p')
                 {
                     //Move o professor na grid           
                     grid[professor->posx][professor->posy] = '0';
@@ -155,7 +152,7 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
             if (dist_y<0) // Se a dist_y for negativa, o professor está abaixo do aluno
             {
                     
-                if(grid[professor->posx][professor->posy - 1] != '1'){
+                if(grid[professor->posx][professor->posy - 1] != '1' && grid[professor->posx][professor->posy - 1] != 'p'){
             
                 //Move o professor na grid           
                 grid[professor->posx][professor->posy] = '0';
@@ -169,7 +166,7 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
                 
             else  // Senão, etá acima do aluno
             {
-                if(grid[professor->posx][professor->posy + 1] != '1'){
+                if(grid[professor->posx][professor->posy + 1] != '1' && grid[professor->posx][professor->posy + 1] != 'p'){
             
                 //Move o professor na grid           
                 grid[professor->posx][professor->posy] = '0';
@@ -298,9 +295,19 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
 
 
 
+int profachou(PERSONAGEM *aluno, PERSONAGEM *professor){
+    
+    if (abs(aluno->posx - professor->posx) <= 1 && abs(aluno->posy - professor->posy) <= 1)
+        return 1;
+    else
+        return 0;
+}
 
 
- int loadgame(char *caminhoMapa){
+
+
+
+ int loadgame(char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy){
     //Declaracao do Tamanho da tela 
     const int screenWidth = 800;
     const int screenHeight = 600;
@@ -311,6 +318,9 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
 
     //Declaracoes do mapa
     FILE *mapaGrid;
+    
+    //Controle de Perguntas
+    int achou = 0;
     
     //Declaração professor
     PERSONAGEM professor;
@@ -330,8 +340,8 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
     
     
     //Inicializacao da textura do player
-    aluno.posx = 1;
-    aluno.posy = 1;
+    aluno.posx = posAlx;
+    aluno.posy = posAly;
     aluno.current = LoadTexture("static/sprites/aluno_frente.png");
     
     aluno.frente = LoadTexture("static/sprites/aluno_frente.png");
@@ -342,8 +352,8 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
     
     //Inicializacao da textura e posição do professor
     
-    professor.posx = 10;
-    professor.posy = 10;
+    professor.posx = posPfx;
+    professor.posy = posPfy;
     professor.current = LoadTexture("static/sprites/professor-frente.png");
     
     professor.frente = LoadTexture("static/sprites/professor-frente.png");
@@ -368,40 +378,57 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
    //Cleanup
    fclose(mapaGrid);
     
-    while (!WindowShouldClose()){
+    while (!WindowShouldClose() && achou == 0){
         
-        //Atualiza o valor da camera
-        camera.target = (Vector2){aluno.posx * 20, aluno.posy * 20};
+        //Professor achou o aluno, e faz a pergunta?
+        if (profachou(&aluno, &professor) == 1){
+            achou = 1;
+        }
+        
+        else {
+            //Atualiza o valor da camera
+            camera.target = (Vector2){aluno.posx * 20, aluno.posy * 20};
         
         
-        //Inicializa a Tela
-        BeginDrawing();
+            //Inicializa a Tela
+            BeginDrawing();
 
         
-        //Inicializa a camera 2D
-        BeginMode2D(camera);
+            //Inicializa a camera 2D
+            BeginMode2D(camera);
 
 
-       //move o aluno
-        moveplayer(grid, &aluno);
+            //move o aluno
+            moveplayer(grid, &aluno);
 
         
-        //move o professor
-        moveprof(grid, &professor, aluno.posx, aluno.posy);
+            //move o professor
+            moveprof(grid, &professor, aluno.posx, aluno.posy);
 
         
-        //Desenha o player e o profeesor
-        drawGrid(grid, &aluno, professor.current);
+            //Desenha o player e o profeesor
+            drawGrid(grid, &aluno, professor.current);
         
         
-        //Fundo Preto
-        ClearBackground(BLACK);
+            //Fundo Preto
+            ClearBackground(BLACK);
         
         
-        //Cleanup
-        EndMode2D();
-        EndDrawing();
+            //Cleanup
+            EndMode2D();
+            EndDrawing();
+        }
     }
     CloseWindow();
+    
+    
+    //Valores de Retorno
+    if (achou == 1)
+        //Caso o professor encontre o aluno
+        return 99;
+    else 
+        //Caso alguem feche a janela
+        return 0;
+    
     return 0;
 }
