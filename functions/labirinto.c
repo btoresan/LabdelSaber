@@ -30,14 +30,23 @@ void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor){
     for (int i = metadex; i < metadex + 70; i++){
         for (int j = metadey; j < metadey + 70; j++){
             //desenha o tipo do objeto no quadrado
+            //player
             if (grid[i][j] == 'p')
                 DrawTexture(aluno->current, i*20, j*20, WHITE);
             
+            //professor
             else if (grid[i][j] == 't')
                 DrawTexture(professor, i*20, j*20, WHITE);
             
-            else if (grid[i][j] == '1')
+           //parede
+           else if (grid[i][j] == '1')
                 DrawRectangle(20*i, 20*j, 20, 20, WHITE);
+            
+            //proximo nivel
+            else if (grid[i][j] == 'E')
+                DrawRectangle(20*i, 20*j, 20, 20, BLUE);
+            
+            //nada
             else
                 DrawRectangle(20*i, 20*j, 20, 20, BLACK);
         }
@@ -95,7 +104,6 @@ void moveplayer (char grid[101][100], PERSONAGEM *aluno){
     }
 
 }
-
 
 
 
@@ -304,7 +312,22 @@ int profachou(PERSONAGEM *aluno, PERSONAGEM *professor){
 }
 
 
-
+int saida(PERSONAGEM *aluno, char grid[101][100]){
+    
+    //procura uma saida em todos os quadrados adjacentes ao aluno
+    if (grid[aluno->posx + 1][aluno->posy + 1] == 'E')
+        return 1;
+    else if (grid[aluno->posx + 1][aluno->posy - 1] == 'E')
+        return 1;
+    else if (grid[aluno->posx - 1][aluno->posy + 1] == 'E')
+        return 1;
+    else if (grid[aluno->posx - 1][aluno->posy - 1] == 'E')
+        return 1;
+    
+    
+    else
+        return 0;
+}
 
 
  int loadgame(char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy){
@@ -381,9 +404,11 @@ int profachou(PERSONAGEM *aluno, PERSONAGEM *professor){
     while (!WindowShouldClose() && achou == 0){
         
         //Professor achou o aluno, e faz a pergunta?
-        if (profachou(&aluno, &professor) == 1){
+        if (profachou(&aluno, &professor) == 1)
             achou = 1;
-        }
+        
+        else if (saida(&aluno, grid) == 1)
+            achou = 2;
         
         else {
             //Atualiza o valor da camera
@@ -426,6 +451,11 @@ int profachou(PERSONAGEM *aluno, PERSONAGEM *professor){
     if (achou == 1)
         //Caso o professor encontre o aluno
         return 99;
+        
+    else if (achou == 2)
+        //Caso o aluno ache a saida
+        return 88;
+    
     else 
         //Caso alguem feche a janela
         return 0;

@@ -11,7 +11,7 @@ int run()
         //opções do menu
 
         case 0:
-            jogo("static/mapas/mapa1.txt", 1, 1, 1, 30);
+            jogo(0);
             break;
 
         //case 1: carrega jogo

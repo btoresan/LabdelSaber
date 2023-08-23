@@ -1,9 +1,13 @@
 #include "labirinto.c"
 #include <raylib.h>
+#include <string.h>
+
+//Declaracao de funcoes para nao serem implicitas
+int labirinto();
+int jogo();
 
 
 //Estrutura perguntas
-
 typedef struct
 {
     char enunciado[200];
@@ -12,8 +16,8 @@ typedef struct
     char alternativas [4][200];
 }PERGUNTA;
 
-
-int perguntas (PERGUNTA *vetperguntas){
+//Faz uma pergunta
+int perguntas (PERGUNTA *vetperguntas, int nivel){
     
     //Declaração de textura
     Texture2D fundo_perguntas;
@@ -138,17 +142,18 @@ int perguntas (PERGUNTA *vetperguntas){
     
     //Cleanup
     CloseWindow();
+    fclose(arqp);
     
     //Volta para o Labirinto
-    labirinto();
+    jogo(nivel);
     
     return saida;
 }
 
 
 
-
-int labirinto (){
+//controla o labirinto e as perguntas
+int labirinto (char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy, int nivel){
     //Declaracao que salva o valor retornado de loadgame
     int saida;
     
@@ -156,13 +161,16 @@ int labirinto (){
     PERGUNTA vetperguntas[100];
     
     //Roda o jogo e salva a saida 
-    saida = loadgame("static/mapas/mapa1.txt", 1, 1, 1, 30);
+    saida = loadgame(caminhoMapa, posAlx, posAly, posPfx, posPfy);
     
     //Carrega a tela apropriada dependendo da saida
     switch (saida)
     {
         case 99:
-            perguntas(vetperguntas);
+            perguntas(vetperguntas, nivel);
+            break;
+        case 88:
+            jogo(nivel + 1);
             break;
     }
     
@@ -172,9 +180,14 @@ int labirinto (){
 
 
 
-
-int jogo (){
-    labirinto();
+//faz a chamado do labirinto no nivel certo;
+int jogo (int nivel){
+    char caminhos[2][25];
+    
+    strcpy(caminhos[0], "static/mapas/mapa1.txt");
+    strcpy(caminhos[1], "static/mapas/mapa2.txt");
+    
+    labirinto(caminhos[nivel], 1, 1, GetRandomValue(1, 40), GetRandomValue(1, 30), nivel);
     
     return 0;
 }
