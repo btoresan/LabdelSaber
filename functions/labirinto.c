@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 
 // Estrutura personagem
 typedef struct {
@@ -55,8 +56,6 @@ void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor){
 
 
 
-
-
 void moveplayer (char grid[101][100], PERSONAGEM *aluno){
 
     if(IsKeyDown(KEY_UP) && grid[aluno->posx][aluno->posy - 1] != '1'){
@@ -104,7 +103,6 @@ void moveplayer (char grid[101][100], PERSONAGEM *aluno){
     }
 
 }
-
 
 
 
@@ -312,6 +310,7 @@ int profachou(PERSONAGEM *aluno, PERSONAGEM *professor){
 }
 
 
+
 int saida(PERSONAGEM *aluno, char grid[101][100]){
     
     //procura uma saida em todos os quadrados adjacentes ao aluno
@@ -330,7 +329,8 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
 }
 
 
- int loadgame(char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy){
+
+ int loadgame(char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy, int vidas){
     //Declaracao do Tamanho da tela 
     const int screenWidth = 800;
     const int screenHeight = 600;
@@ -350,6 +350,14 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
     
     //Declaracoes do player
     PERSONAGEM aluno;
+    
+    //Declaraqcoes de vida
+    char displayVidas[15];
+    
+    //Inicializao do Display da Vida
+    strcpy(displayVidas, "HP_ALUNO = N");
+    displayVidas[11] = (char) (vidas + 48);
+    
     
     //declaracoes da camera;
     Camera2D camera = { 0 };
@@ -433,6 +441,10 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
         
             //Desenha o player e o profeesor
             drawGrid(grid, &aluno, professor.current);
+            
+            
+            //Desenha vida do Aluno
+            DrawText(displayVidas, aluno.posx*20 - 390, aluno.posy*20 - 290, 30, RED);
         
         
             //Fundo Preto

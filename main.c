@@ -11,7 +11,7 @@ int run()
         //opções do menu
 
         case 0:
-            jogo(0);
+            jogo(0, 3);
             break;
 
         //case 1: carrega jogo

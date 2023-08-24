@@ -17,7 +17,7 @@ typedef struct
 }PERGUNTA;
 
 //Faz uma pergunta
-int perguntas (PERGUNTA *vetperguntas, int nivel){
+void perguntas (PERGUNTA *vetperguntas, int nivel, int vidas){
     
     //Declaração de textura
     Texture2D fundo_perguntas;
@@ -144,16 +144,18 @@ int perguntas (PERGUNTA *vetperguntas, int nivel){
     CloseWindow();
     fclose(arqp);
     
-    //Volta para o Labirinto
-    jogo(nivel);
+    //volta pro jogo e subtrai a vida caso algeum erre
+    if (saida == 1)
+        jogo(nivel, vidas);
+    else
+        jogo(nivel, vidas -1);
     
-    return saida;
 }
 
 
 
 //controla o labirinto e as perguntas
-int labirinto (char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy, int nivel){
+int labirinto (char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy, int nivel, int vidas){
     //Declaracao que salva o valor retornado de loadgame
     int saida;
     
@@ -161,13 +163,13 @@ int labirinto (char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy
     PERGUNTA vetperguntas[100];
     
     //Roda o jogo e salva a saida 
-    saida = loadgame(caminhoMapa, posAlx, posAly, posPfx, posPfy);
+    saida = loadgame(caminhoMapa, posAlx, posAly, posPfx, posPfy, vidas);
     
     //Carrega a tela apropriada dependendo da saida
     switch (saida)
     {
         case 99:
-            perguntas(vetperguntas, nivel);
+            perguntas(vetperguntas, nivel, vidas);
             break;
         case 88:
             jogo(nivel + 1);
@@ -181,7 +183,7 @@ int labirinto (char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy
 
 
 //faz a chamado do labirinto no nivel certo;
-int jogo (int nivel){
+int jogo (int nivel, int vidas){
     char caminhos[10][25];
     
     strcpy(caminhos[0], "static/mapas/mapa1.txt");
@@ -189,7 +191,7 @@ int jogo (int nivel){
     strcpy(caminhos[2], "static/mapas/mapa3.txt");
     strcpy(caminhos[7], "static/mapas/mapa8.txt");
     
-    labirinto(caminhos[nivel], 1, 1, GetRandomValue(1, 40), GetRandomValue(1, 30), nivel);
+    labirinto(caminhos[nivel], 1, 1, GetRandomValue(1, 40), GetRandomValue(1, 30), nivel, vidas);
     
     return 0;
 }
