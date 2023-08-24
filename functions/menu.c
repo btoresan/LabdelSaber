@@ -39,7 +39,7 @@ int menu()
     
     
     
-    while (saida == -1)
+    while (saida == -1 && !WindowShouldClose())
     {                   
         //LOGICA
         

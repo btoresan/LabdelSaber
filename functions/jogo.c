@@ -5,6 +5,7 @@
 //Declaracao de funcoes para nao serem implicitas
 int labirinto();
 void jogo();
+int run();
 
 
 //Estrutura perguntas
@@ -15,6 +16,44 @@ typedef struct
     int altcorreta;
     char alternativas [4][200];
 }PERGUNTA;
+
+
+
+void Win(){
+
+    // Inicializacao
+    const int screenWidth = 800;
+    const int screenHeight = 600;
+    
+    int escape = 0;
+
+    InitWindow(screenWidth, screenHeight, "Vitoria");
+
+    while (!WindowShouldClose() && escape == 0) {
+
+        //Inicializacao do desenho
+        BeginDrawing();
+        
+        ClearBackground(GREEN);
+
+        // Texto do Gaem Over
+        DrawText("Voce escapou do INF!!! :)", screenWidth/2 - MeasureText("Voce escapou do INF!!! :)", 40)/2, screenHeight/2 - 40, 40, WHITE);
+        DrawText("Aperte R para reiniciar", screenWidth/2 - MeasureText("Aperte R para reiniciar", 20)/2, screenHeight/2 + 20, 20, GRAY);
+            
+        //Volta para o menu
+        if (IsKeyPressed(KEY_R)) {
+            escape = 1;
+        }
+
+        EndDrawing();
+    }
+    
+    // Cleanup
+    CloseWindow();
+    
+    run();
+    
+}
 
 
 
@@ -227,6 +266,10 @@ void jogo (int nivel, int vidas){
     
     if (vidas == 0){
         game_over();
+    }
+    
+    else if (nivel == 10){
+        Win();
     }
     
     else {

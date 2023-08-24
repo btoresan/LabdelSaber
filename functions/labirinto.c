@@ -47,6 +47,10 @@ void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor){
             else if (grid[i][j] == 'E')
                 DrawRectangle(20*i, 20*j, 20, 20, BLUE);
             
+            //caminho para a vitoria
+            else if (grid[i][j] == 'W')
+                DrawRectangle(20*i, 20*j, 20, 20, GREEN);
+            
             //nada
             else
                 DrawRectangle(20*i, 20*j, 20, 20, BLACK);
