@@ -189,7 +189,13 @@ int jogo (int nivel, int vidas){
     strcpy(caminhos[0], "static/mapas/mapa1.txt");
     strcpy(caminhos[1], "static/mapas/mapa2.txt");
     strcpy(caminhos[2], "static/mapas/mapa3.txt");
+    strcpy(caminhos[3], "static/mapas/mapa4.txt");
+    strcpy(caminhos[4], "static/mapas/mapa5.txt");
+    strcpy(caminhos[5], "static/mapas/mapa6.txt");
+    strcpy(caminhos[6], "static/mapas/mapa7.txt");
     strcpy(caminhos[7], "static/mapas/mapa8.txt");
+    strcpy(caminhos[8], "static/mapas/mapa9.txt");
+    strcpy(caminhos[9], "static/mapas/mapa10.txt");
     
     labirinto(caminhos[nivel], 1, 1, GetRandomValue(1, 40), GetRandomValue(1, 30), nivel, vidas);
     
