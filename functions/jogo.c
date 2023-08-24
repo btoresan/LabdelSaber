@@ -4,7 +4,7 @@
 
 //Declaracao de funcoes para nao serem implicitas
 int labirinto();
-int jogo();
+void jogo();
 
 
 //Estrutura perguntas
@@ -15,6 +15,45 @@ typedef struct
     int altcorreta;
     char alternativas [4][200];
 }PERGUNTA;
+
+
+
+void game_over(){
+    // Inicializacao
+    const int screenWidth = 800;
+    const int screenHeight = 600;
+    
+    int escape = 0;
+
+    InitWindow(screenWidth, screenHeight, "Game Over Screen");
+
+    while (!WindowShouldClose() && escape == 0) {
+
+        //Inicializacao do desenho
+        BeginDrawing();
+        
+        ClearBackground(RAYWHITE);
+
+        // Texto do Gaem Over
+        DrawText("Game Over", screenWidth/2 - MeasureText("Game Over", 40)/2, screenHeight/2 - 40, 40, RED);
+        DrawText("Aperte R para reiniciar", screenWidth/2 - MeasureText("Aperte R para reiniciar", 20)/2, screenHeight/2 + 20, 20, GRAY);
+            
+        //Volta para o menu
+        if (IsKeyPressed(KEY_R)) {
+            escape = 1;
+        }
+
+        EndDrawing();
+    }
+    
+    // Cleanup
+    CloseWindow();
+    
+    run();
+    
+}
+
+
 
 //Faz uma pergunta
 void perguntas (PERGUNTA *vetperguntas, int nivel, int vidas){
@@ -183,21 +222,25 @@ int labirinto (char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy
 
 
 //faz a chamado do labirinto no nivel certo;
-int jogo (int nivel, int vidas){
+void jogo (int nivel, int vidas){
     char caminhos[10][25];
     
-    strcpy(caminhos[0], "static/mapas/mapa1.txt");
-    strcpy(caminhos[1], "static/mapas/mapa2.txt");
-    strcpy(caminhos[2], "static/mapas/mapa3.txt");
-    strcpy(caminhos[3], "static/mapas/mapa4.txt");
-    strcpy(caminhos[4], "static/mapas/mapa5.txt");
-    strcpy(caminhos[5], "static/mapas/mapa6.txt");
-    strcpy(caminhos[6], "static/mapas/mapa7.txt");
-    strcpy(caminhos[7], "static/mapas/mapa8.txt");
-    strcpy(caminhos[8], "static/mapas/mapa9.txt");
-    strcpy(caminhos[9], "static/mapas/mapa10.txt");
+    if (vidas == 0){
+        game_over();
+    }
     
-    labirinto(caminhos[nivel], 1, 1, GetRandomValue(1, 40), GetRandomValue(1, 30), nivel, vidas);
+    else {
+        strcpy(caminhos[0], "static/mapas/mapa1.txt");
+        strcpy(caminhos[1], "static/mapas/mapa2.txt");
+        strcpy(caminhos[2], "static/mapas/mapa3.txt");
+        strcpy(caminhos[3], "static/mapas/mapa4.txt");
+        strcpy(caminhos[4], "static/mapas/mapa5.txt");
+        strcpy(caminhos[5], "static/mapas/mapa6.txt");
+        strcpy(caminhos[6], "static/mapas/mapa7.txt");
+        strcpy(caminhos[7], "static/mapas/mapa8.txt");
+        strcpy(caminhos[8], "static/mapas/mapa9.txt");
+        strcpy(caminhos[9], "static/mapas/mapa10.txt");
     
-    return 0;
+        labirinto(caminhos[nivel], 1, 1, GetRandomValue(1, 40), GetRandomValue(1, 30), nivel, vidas);
+    }
 }
