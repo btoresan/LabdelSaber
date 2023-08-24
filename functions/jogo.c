@@ -182,10 +182,12 @@ int labirinto (char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy
 
 //faz a chamado do labirinto no nivel certo;
 int jogo (int nivel){
-    char caminhos[2][25];
+    char caminhos[10][25];
     
     strcpy(caminhos[0], "static/mapas/mapa1.txt");
     strcpy(caminhos[1], "static/mapas/mapa2.txt");
+    strcpy(caminhos[2], "static/mapas/mapa3.txt");
+    strcpy(caminhos[7], "static/mapas/mapa8.txt");
     
     labirinto(caminhos[nivel], 1, 1, GetRandomValue(1, 40), GetRandomValue(1, 30), nivel);
     
