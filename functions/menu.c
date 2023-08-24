@@ -7,9 +7,18 @@ int menu()
     
     
     // Declaração de texturas
-    Texture2D fundo_menu;    
+    Texture2D fundo_menu;   
+
+    //Declaracao da musica
+    Music music;
     
     InitWindow(800, 450, "menu");
+    InitAudioDevice();
+    
+    //Declaração musica
+    music = LoadMusicStream("static/musicas/littleroot.mp3");
+    PlayMusicStream(music);
+    
     
     
     //Atribuição de Texturas
@@ -41,9 +50,10 @@ int menu()
     
     while (saida == -1 && !WindowShouldClose())
     {                   
-        //LOGICA
+        //Musica
+        UpdateMusicStream(music);
         
-     
+        //LOGICA
         
         //Posição do retangulo de escolha para KEY_DOWN
         if(IsKeyPressed(KEY_DOWN))
@@ -145,6 +155,11 @@ int menu()
                
         EndDrawing();
     }
+    
+    StopMusicStream(music);
+    
+    
+    CloseAudioDevice();
     CloseWindow();
 
     return saida;
