@@ -172,7 +172,7 @@ int labirinto (char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy
             perguntas(vetperguntas, nivel, vidas);
             break;
         case 88:
-            jogo(nivel + 1);
+            jogo(nivel + 1,vidas);
             break;
     }
     
