@@ -51,5 +51,5 @@ void informacoes()
     }
     
     CloseWindow();    
-    menu();
+    run();
 }
