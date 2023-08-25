@@ -317,16 +317,16 @@ void colega(char grid[101][100],PERSONAGEM colegas[], int posxal, int posyal)
     {       
         do //Enquanto a posição do colega for igual a outro objeto/personagem , sorteia uma nova posição
         {
-            colegas[i]->posx = GetRandomValue(0,101);
-            colegas[i]->posy = GetRandomValue(0,100);
+            colegas[i].posx = GetRandomValue(0,101);
+            colegas[i].posy = GetRandomValue(0,100);
         
-        }while(grid[colegas[i]->posx][colegas[i]->posy]=='1' || grid[colegas[i]->posx][colegas[i]->posy]=='t'|| grid[colegas[i]->posx][colegas[i]->posy]=='E'|| grid[colegas[i]->posx][colegas[i]->posy]=='W');
+        }while(grid[colegas[i].posx][colegas[i].posy]=='1' || grid[colegas[i].posx][colegas[i].posy]=='t'|| grid[colegas[i].posx][colegas[i].posy]=='E'|| grid[colegas[i].posx][colegas[i].posy]=='W');
     
         //Atualiza a grid com o char correspondente ao colega
-        grid[colegas[i]->posx][colegas[i]->posy] = 'c';
+        grid[colegas[i].posx][colegas[i].posy] = 'c';
         
         // Se ele estiver na mesma posição do aluno, inicia as perguntas
-        if(posxal==colegas[i]->posx && posyal == colegas[i]->posy)
+        if(posxal==colegas[i].posx && posyal == colegas[i].posy)
             perguntas();  
     }     
 }
