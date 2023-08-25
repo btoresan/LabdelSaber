@@ -320,7 +320,7 @@ void colega(char grid[101][100],PERSONAGEM colegas[], int posxal, int posyal)
             colegas[i].posx = GetRandomValue(0,101);
             colegas[i].posy = GetRandomValue(0,100);
         
-        }while(grid[colegas[i].posx][colegas[i].posy]=='1' || grid[colegas[i].posx][colegas[i].posy]=='t'|| grid[colegas[i].posx][colegas[i].posy]=='E'|| grid[colegas[i].posx][colegas[i].posy]=='W');
+        }while(grid[colegas[i].posx][colegas[i].posy]=='1');
     
         //Atualiza a grid com o char correspondente ao colega
         grid[colegas[i].posx][colegas[i].posy] = 'c';
