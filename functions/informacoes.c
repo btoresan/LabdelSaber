@@ -50,5 +50,6 @@ void informacoes()
         
     }
     
-    CloseWindow();        
+    CloseWindow();    
+    menu();
 }

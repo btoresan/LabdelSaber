@@ -2,6 +2,7 @@
 #include "functions/menu.c" //funções dos arquivos menu
 #include "functions/scoreboard.c" //funções do scoreboard
 #include "functions/jogo.c"
+#include "functions/informacoes.c"
 
 
 int run()
