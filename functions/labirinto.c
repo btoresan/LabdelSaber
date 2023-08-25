@@ -489,11 +489,11 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
             moveprof(grid, &professor, aluno.posx, aluno.posy);
             
             //posicionamento e lógica colega
-            colega(grid,&colegas,aluno.posx,aluno.posy);
+            colega(grid,colegas,aluno.posx,aluno.posy);
 
         
-            //Desenha o player e o profeesor
-            drawGrid(grid, &aluno, professor.current,colega.current);
+            //Desenha o player e o profeesor e o colega
+            drawGrid(grid, &aluno, professor.current,colegas[0].current);
             
             
             //Desenha vida do Aluno
