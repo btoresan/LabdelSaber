@@ -20,7 +20,10 @@ int run()
             scoreboard(); //carrega o scorboard
             break;
         
-        //case 3: inofrmacoes
+        //case 3: informacoes
+        case 3:
+            informacoes();
+            break;
 
         //case 4: sair
     }
