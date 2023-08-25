@@ -309,7 +309,7 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
 }
 
 
-void colega(char grid[101][100],PERSONAGEM *colegas[], int posxal, int posyal)
+void colega(char grid[101][100],PERSONAGEM colegas[], int posxal, int posyal)
 {
     int i;
     
