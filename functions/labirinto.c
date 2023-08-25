@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#define QCOLEGAS 4
 
 // Estrutura personagem
 typedef struct {
@@ -16,7 +17,7 @@ typedef struct {
 
 
 
-void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor){
+void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor, Texture2D colega){
     //variaveis para carregar o apenas o qudrante certo
     //de forma fluida
     int metadex = 0;
@@ -39,6 +40,9 @@ void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor){
             else if (grid[i][j] == 't')
                 DrawTexture(professor, i*20, j*20, WHITE);
             
+            else if (grid[i][j]=='c')
+                DrawTexture(colega,i*20,j*20,WHITE);
+            
            //parede
            else if (grid[i][j] == '1')
                 DrawRectangle(20*i, 20*j, 20, 20, WHITE);
@@ -50,6 +54,7 @@ void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor){
             //caminho para a vitoria
             else if (grid[i][j] == 'W')
                 DrawRectangle(20*i, 20*j, 20, 20, GREEN);
+            
             
             //nada
             else
@@ -304,6 +309,35 @@ void moveprof (char grid[101][100], PERSONAGEM *professor, int posxal, int posya
 }
 
 
+void colega(char grid[101][100],PERSONAGEM *colegas[], int posxal, int posyal)
+{
+    int i;
+    
+    for(i=0;i<QCOLEGAS;i++)
+    {       
+        do //Enquanto a posição do colega for igual a outro objeto/personagem , sorteia uma nova posição
+        {
+            colegas[i]->posx = GetRandomValue(0,101);
+            colegas[i]->posy = GetRandomValue(0,100);
+        
+        }while(grid[colegas[i]->posx][colegas[i]->posy]=='1' || grid[colegas[i]->posx][colegas[i]->posy]=='t'|| grid[colegas[i]->posx][colegas[i]->posy]=='E'|| grid[colegas[i]->posx][colegas[i]->posy]=='W');
+    
+        //Atualiza a grid com o char correspondente ao colega
+        grid[colegas[i]->posx][colegas[i]->posy] = 'c';
+        
+        // Se ele estiver na mesma posição do aluno, inicia as perguntas
+        if(posxal==colegas[i]->posx && posyal == colegas[i]->posy)
+            perguntas();  
+    }     
+}
+
+
+
+
+
+
+
+
 
 int profachou(PERSONAGEM *aluno, PERSONAGEM *professor){
     
@@ -338,6 +372,7 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
     //Declaracao do Tamanho da tela 
     const int screenWidth = 800;
     const int screenHeight = 600;
+    
 
     //Declaracao da Grid 20x menor que o tamanho da tela por sessao
     //1 quadradoda grid = 20x20
@@ -354,6 +389,9 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
     
     //Declaracoes do player
     PERSONAGEM aluno;
+    
+    //Declarações do vetor de colegas
+    PERSONAGEM colegas[QCOLEGAS];
     
     //Declaraqcoes de vida
     char displayVidas[15];
@@ -395,6 +433,14 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
     professor.tras = LoadTexture("static/sprites/professor-costas.png");
     professor.direita = LoadTexture("static/sprites/professor-direita.png");
     professor.esquerda = LoadTexture("static/sprites/professor-esquerda.png");
+    
+    // Inicialização da textura dos colegas  
+    int i;
+    
+    for(i=0;i<QCOLEGAS;i++)
+    {
+        colegas[i].current = LoadTexture("static/sprites/colega.png");
+    }
     
     
     //Inicializacao da do mapa
@@ -441,10 +487,13 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
         
             //move o professor
             moveprof(grid, &professor, aluno.posx, aluno.posy);
+            
+            //posicionamento e lógica colega
+            colega(grid,&colegas,aluno.posx,aluno.posy);
 
         
             //Desenha o player e o profeesor
-            drawGrid(grid, &aluno, professor.current);
+            drawGrid(grid, &aluno, professor.current,colega.current);
             
             
             //Desenha vida do Aluno
