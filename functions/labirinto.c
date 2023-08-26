@@ -336,10 +336,13 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
 
 
 
- int loadgame(char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy, int vidas){
+ int loadgame(char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy, int vidas, int nivel){
     //Declaracao do Tamanho da tela 
     const int screenWidth = 800;
     const int screenHeight = 600;
+    
+    //Arquivo do Save
+    FILE *save;
     
 
     //Declaracao da Grid 20x menor que o tamanho da tela por sessao
@@ -476,6 +479,8 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
             EndDrawing();
         }
     }
+   
+    
     StopMusicStream(music);
     
     
@@ -491,10 +496,21 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
     else if (achou == 2)
         //Caso o aluno ache a saida
         return 88;
-    
-    else 
-        //Caso alguem feche a janela
-        return 0;
-    
-    return 0;
+        
+   //Caso alguem feche a janela salva o estado do jogo
+        
+   save = fopen("static/save.bin", "wb");
+        
+   fwrite(&nivel, sizeof(int), 1, save);
+   fwrite(&vidas, sizeof(int), 1, save);
+   fwrite(&(aluno.posx), sizeof(int), 1, save);
+   fwrite(&(aluno.posy), sizeof(int), 1, save);
+   fwrite(&(professor.posx), sizeof(int), 1, save);
+   fwrite(&(professor.posy), sizeof(int), 1, save);
+        
+   fclose(save);
+ 
+        
+   return 0;
+ 
 }

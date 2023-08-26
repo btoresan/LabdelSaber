@@ -113,6 +113,7 @@ void perguntas (PERGUNTA *vetperguntas, int nivel, int vidas){
     int i,n,k;
     
     FILE *arqp;
+    FILE *save;
     
     //Pega um valor aleatório que será a posição da pergunta escolhida
     int nump = GetRandomValue(0,99);
@@ -222,38 +223,122 @@ void perguntas (PERGUNTA *vetperguntas, int nivel, int vidas){
     CloseWindow();
     fclose(arqp);
     
-    //volta pro jogo e subtrai a vida caso algeum erre
-    if (saida == 1)
-        jogo(nivel, vidas);
-    else
-        jogo(nivel, vidas -1);
+    //Se errarem o save diminui em um a vida no save
+    if (saida == 0){
+        
+        vidas -= 1;
+        
+        save = fopen("static/save.bin", "r+b");
+        fseek(save, sizeof(int), SEEK_SET);
+        fwrite(&vidas, sizeof(int), 1, save);
+        
+        fclose(save);
+    }
+        
+    labirinto();
+}
+
+
+
+void ProximoNivel(int nivel, int vida){
     
+    FILE *save;
+    int um, ran1, ran2;
+    
+    um = 1;
+    ran1 = GetRandomValue(10, 40);
+    ran2 = GetRandomValue(10, 30);
+    
+    nivel++;
+    
+    save = fopen("static/save.bin", "r+b");
+    
+    fwrite(&nivel, sizeof(int), 1, save);
+    fwrite(&vida, sizeof(int), 1, save);
+    fwrite(&um, sizeof(int), 1, save);
+    fwrite(&um, sizeof(int), 1, save);
+    fwrite(&ran1, sizeof(int), 1, save);
+    fwrite(&ran2, sizeof(int), 1, save);
+    
+    
+    fclose(save);
+    
+    labirinto();
 }
 
 
 
 //controla o labirinto e as perguntas
-int labirinto (char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy, int nivel, int vidas){
+int labirinto (){
     //Declaracao que salva o valor retornado de loadgame
     int saida;
+    
+    //Declaracoes dos valores do jogo
+    char caminhos[10][25];
+    int posAlx, posAly, posPfx, posPfy, vidas, nivel;
+    
+    //Declaracao arquivo save
+    FILE *save;
     
     //Declaracao do vetor de perguntas
     PERGUNTA vetperguntas[100];
     
-    //Roda o jogo e salva a saida 
-    saida = loadgame(caminhoMapa, posAlx, posAly, posPfx, posPfy, vidas);
+    //Abre o save e atualiza os valores
+    save = fopen("static/save.bin", "rb");
     
-    //Carrega a tela apropriada dependendo da saida
-    switch (saida)
-    {
+    //Verifica se existe save
+    if (save == NULL){
+        
+        game_over();
+        return 404;
+        
+    }
+    
+    //Carrega os caminhos dos mapas
+    strcpy(caminhos[0], "static/mapas/mapa1.txt");
+    strcpy(caminhos[1], "static/mapas/mapa2.txt");
+    strcpy(caminhos[2], "static/mapas/mapa3.txt");
+    strcpy(caminhos[3], "static/mapas/mapa4.txt");
+    strcpy(caminhos[4], "static/mapas/mapa5.txt");
+    strcpy(caminhos[5], "static/mapas/mapa6.txt");
+    strcpy(caminhos[6], "static/mapas/mapa7.txt");
+    strcpy(caminhos[7], "static/mapas/mapa8.txt");
+    strcpy(caminhos[8], "static/mapas/mapa9.txt");
+    strcpy(caminhos[9], "static/mapas/mapa10.txt");
+    
+    
+    //Le o save
+    fread(&nivel, sizeof(int), 1, save);
+    fread(&vidas, sizeof(int), 1, save);
+    fread(&posAlx, sizeof(int), 1, save);
+    fread(&posAly, sizeof(int), 1, save);
+    fread(&posPfx, sizeof(int), 1, save);
+    fread(&posPfy, sizeof(int), 1, save);
+    
+    fclose(save);
+    
+    if (vidas == 0)
+        game_over();
+    
+    else if (nivel == 10)
+        Win();
+        
+    else {
+    
+        //Roda o jogo e salva a saida 
+        saida = loadgame(caminhos[nivel], posAlx, posAly, posPfx, posPfy, vidas, nivel);
+    
+        //Carrega a tela apropriada dependendo da saida
+        switch (saida)
+        {
         case 99:
             perguntas(vetperguntas, nivel, vidas);
             break;
         case 88:
-            jogo(nivel + 1,vidas);
+            ProximoNivel(nivel, vidas);
             break;
+        }
     }
-    
     
     return 0;
 }
@@ -261,29 +346,38 @@ int labirinto (char *caminhoMapa, int posAlx, int posAly, int posPfx, int posPfy
 
 
 //faz a chamado do labirinto no nivel certo;
-void jogo (int nivel, int vidas){
-    char caminhos[10][25];
+void Novojogo (int nivel, int vidas){
     
-    if (vidas == 0){
-        game_over();
-    }
+    int zero, tres, um, ran1, ran2;
+    FILE *save;
     
-    else if (nivel == 10){
-        Win();
-    }
+    zero = 0;
+    tres = 3;
+    um = 1;
     
-    else {
-        strcpy(caminhos[0], "static/mapas/mapa1.txt");
-        strcpy(caminhos[1], "static/mapas/mapa2.txt");
-        strcpy(caminhos[2], "static/mapas/mapa3.txt");
-        strcpy(caminhos[3], "static/mapas/mapa4.txt");
-        strcpy(caminhos[4], "static/mapas/mapa5.txt");
-        strcpy(caminhos[5], "static/mapas/mapa6.txt");
-        strcpy(caminhos[6], "static/mapas/mapa7.txt");
-        strcpy(caminhos[7], "static/mapas/mapa8.txt");
-        strcpy(caminhos[8], "static/mapas/mapa9.txt");
-        strcpy(caminhos[9], "static/mapas/mapa10.txt");
+    ran1 = GetRandomValue(10, 40);
+    ran2 = GetRandomValue(10, 30);
     
-        labirinto(caminhos[nivel], 1, 1, GetRandomValue(1, 40), GetRandomValue(1, 30), nivel, vidas);
-    }
+    save = fopen("static/save.bin", "wb");
+    
+    /*Formatacao do save:
+        int nivel
+        int vida
+        int PosAlx
+        int PosAly
+        int PosPfx
+        int PosPfy
+    */
+    
+    fwrite(&zero, sizeof(int), 1, save);
+    fwrite(&tres, sizeof(int), 1, save);
+    fwrite(&um, sizeof(int), 1, save);
+    fwrite(&um, sizeof(int), 1, save);
+    fwrite(&ran1, sizeof(int), 1, save);
+    fwrite(&ran2, sizeof(int), 1, save);
+    
+    fclose(save);
+    
+    labirinto();
+    
 }

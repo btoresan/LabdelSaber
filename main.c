@@ -12,10 +12,12 @@ int run()
         //opções do menu
 
         case 0:
-            jogo(0, 3);
+            Novojogo(0, 3);
             break;
 
-        //case 1: carrega jogo
+        case 1: //carrega jogo
+            labirinto();
+            break;
 
         case 2: 
             scoreboard(); //carrega o scorboard
@@ -26,7 +28,8 @@ int run()
             informacoes();
             break;
 
-        //case 4: sair
+        case 4: //saida, fecha o jogo
+            break;
     }
 
     return 0;
