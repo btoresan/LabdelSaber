@@ -41,6 +41,10 @@ void informacoes()
             DrawText("ESQUERDA",120,330,35,BLACK);
             
             
+            DrawText("PROXIMO NIVEL",400,90,35,BLACK);
+            DrawRectangle(700,90 , 30, 30, BLUE);
+            
+            
 
             DrawText("Controles", 300, 20, 40, BLACK);
             DrawText("Aperte R para voltar", 20, 20, 20, RED);
