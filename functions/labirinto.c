@@ -358,13 +358,23 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
     //Declaracoes do player
     PERSONAGEM aluno;
     
+    //Declaracao musica
+    Music music;
     
     //Declaraqcoes de vida
     char displayVidas[15];
     
+    //Inicializa a janela e audio
+    InitWindow(screenWidth, screenHeight, "Labirinto Del Saber ALPHA");
+    InitAudioDevice();
+    
     //Inicializao do Display da Vida
     strcpy(displayVidas, "HP_ALUNO = N");
     displayVidas[11] = (char) (vidas + 48);
+    
+    //Inicializacao musica
+    music = LoadMusicStream("static/musicas/rocket.mp3");
+    PlayMusicStream(music);
     
     
     //declaracoes da camera;
@@ -373,9 +383,6 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
     camera.offset = (Vector2){400, 300};
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
-    
-    //Inicializa a janela 
-    InitWindow(screenWidth, screenHeight, "Labirinto Del Saber ALPHA");
     
     
     //Inicializacao da textura do player
@@ -413,12 +420,15 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
         }
     }
     
-    SetTargetFPS(10);
+    SetTargetFPS(18);
     
    //Cleanup
    fclose(mapaGrid);
     
     while (!WindowShouldClose() && achou == 0){
+        
+        //Toca Musica
+        UpdateMusicStream(music);
         
         //Professor achou o aluno, e faz a pergunta?
         if (profachou(&aluno, &professor) == 1)
@@ -428,6 +438,7 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
             achou = 2;
         
         else {
+            
             //Atualiza o valor da camera
             camera.target = (Vector2){aluno.posx * 20, aluno.posy * 20};
         
@@ -465,6 +476,10 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
             EndDrawing();
         }
     }
+    StopMusicStream(music);
+    
+    
+    CloseAudioDevice();
     CloseWindow();
     
     
