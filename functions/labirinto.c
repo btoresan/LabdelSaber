@@ -8,6 +8,7 @@
 typedef struct {
     int posx;
     int posy;
+    int creditos;
     Texture2D current;
     Texture2D frente;
     Texture2D tras;
@@ -17,11 +18,12 @@ typedef struct {
 
 
 
-void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor){
+void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor, Texture2D Scroll){
     //variaveis para carregar o apenas o qudrante certo
     //de forma fluida
     int metadex = 0;
     int metadey = 0;
+    
     
     if (aluno->posx > 50)
         metadex = 30;
@@ -52,6 +54,10 @@ void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor){
             else if (grid[i][j] == 'W')
                 DrawRectangle(20*i, 20*j, 20, 20, GREEN);
             
+            //Creditos
+            else if (grid[i][j] == 'S')
+                DrawTexture(Scroll, i*20, j*20, WHITE);
+            
             
             //nada
             else
@@ -64,44 +70,64 @@ void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor){
 
 void moveplayer (char grid[101][100], PERSONAGEM *aluno){
 
-    if(IsKeyDown(KEY_UP) && grid[aluno->posx][aluno->posy - 1] != '1'){
+    if(IsKeyDown(KEY_UP) && grid[aluno->posx][aluno->posy - 1] != '1' && grid[aluno->posx][aluno->posy - 1] != 'E'){
         
         //Move o aluno na grid
         grid[aluno->posx][aluno->posy] = '0';
         aluno->posy -= 1;
+        
+        //Atualiza creditos
+        if(grid[aluno->posx][aluno->posy] == 'S')
+            aluno->creditos++;
+            
         grid[aluno->posx][aluno->posy] = 'p';
         
         //atualiza o sprite 
         aluno->current = aluno->tras;
     }
 
-    else if(IsKeyDown(KEY_LEFT) && grid[aluno->posx - 1][aluno->posy] != '1'){
+    else if(IsKeyDown(KEY_LEFT) && grid[aluno->posx - 1][aluno->posy] != '1' && grid[aluno->posx - 1][aluno->posy] != 'E'){
         
         //Move o aluno na grid
         grid[aluno->posx][aluno->posy] = '0';
         aluno->posx -= 1;
+        
+        //Atualiza creditos
+        if(grid[aluno->posx][aluno->posy] == 'S')
+            aluno->creditos++;
+        
         grid[aluno->posx][aluno->posy] = 'p';
         
         //atualiza o sprite
         aluno->current = aluno->esquerda;
     }
 
-    else if(IsKeyDown(KEY_DOWN) && grid[aluno->posx][aluno->posy + 1] != '1'){
+    else if(IsKeyDown(KEY_DOWN) && grid[aluno->posx][aluno->posy + 1] != '1' && grid[aluno->posx][aluno->posy + 1] != 'E'){
         
         //Move o Aluno na Grid
         grid[aluno->posx][aluno->posy] = '0';
         aluno->posy += 1;
+        
+        //Atualiza creditos
+        if(grid[aluno->posx][aluno->posy] == 'S')
+            aluno->creditos++;
+        
         grid[aluno->posx][aluno->posy] = 'p';
         
         //Atualiza o sprite
         aluno->current = aluno->frente;
     }
 
-    else if(IsKeyDown(KEY_RIGHT) && grid[aluno->posx + 1][aluno->posy] != '1'){
+    else if(IsKeyDown(KEY_RIGHT) && grid[aluno->posx + 1][aluno->posy] != '1' && grid[aluno->posx + 1][aluno->posy] != 'E'){
         
         //Move o Aluno na Grid
         grid[aluno->posx][aluno->posy] = '0';
         aluno->posx += 1;
+        
+        //Atualiza creditos
+        if(grid[aluno->posx][aluno->posy] == 'S')
+            aluno->creditos++;
+        
         grid[aluno->posx][aluno->posy] = 'p';
         
         //Atualiza o sprite
@@ -319,8 +345,11 @@ int profachou(PERSONAGEM *aluno, PERSONAGEM *professor){
 
 int saida(PERSONAGEM *aluno, char grid[101][100]){
     
+    //verifica se o player tem o minimo de creditos
+    if (aluno->creditos < 4)
+        return 0;
     //procura uma saida em todos os quadrados adjacentes ao aluno
-    if (grid[aluno->posx + 1][aluno->posy + 1] == 'E')
+    else if (grid[aluno->posx + 1][aluno->posy + 1] == 'E')
         return 1;
     else if (grid[aluno->posx + 1][aluno->posy - 1] == 'E')
         return 1;
@@ -364,16 +393,22 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
     //Declaracao musica
     Music music;
     
-    //Declaraqcoes de vida
+    //Declaraqcoes de vida e credito
     char displayVidas[15];
+    char displayCreditos[15];
+    
+    //Declaracao e Inicializacao do credito
+    Texture2D Scroll;
     
     //Inicializa a janela e audio
     InitWindow(screenWidth, screenHeight, "Labirinto Del Saber ALPHA");
     InitAudioDevice();
     
-    //Inicializao do Display da Vida
-    strcpy(displayVidas, "HP_ALUNO = N");
+    //Inicializao do Display da Vida e creditos
+    strcpy(displayVidas, "HP_ALUNO = ");
     displayVidas[11] = (char) (vidas + 48);
+    
+    strcpy(displayCreditos, "CREDITOS = N");
     
     //Inicializacao musica
     music = LoadMusicStream("static/musicas/rocket.mp3");
@@ -388,7 +423,8 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
     camera.zoom = 1.0f;
     
     
-    //Inicializacao da textura do player
+    //Inicializacao da textura do player e creditos
+    aluno.creditos = 0;
     aluno.posx = posAlx;
     aluno.posy = posAly;
     aluno.current = LoadTexture("static/sprites/aluno_frente.png");
@@ -397,6 +433,8 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
     aluno.tras = LoadTexture("static/sprites/aluno_tras.png");
     aluno.esquerda = LoadTexture("static/sprites/aluno_esquerda.png");
     aluno.direita = LoadTexture("static/sprites/aluno_direita.png");
+    
+    Scroll = LoadTexture("static/sprites/scroll.png");
     
     
     //Inicializacao da textura e posição do professor
@@ -423,12 +461,19 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
         }
     }
     
+    //Carrega 20 creditos em lugares aleatórios
+    for (int i = 0; i < 20; i++){
+        grid[GetRandomValue(1, 95)][GetRandomValue(1, 95)] = 'S';
+    }
+    
     SetTargetFPS(18);
     
    //Cleanup
    fclose(mapaGrid);
     
     while (!WindowShouldClose() && achou == 0){
+        
+        displayCreditos[11] = (char) (aluno.creditos + 48);
         
         //Toca Musica
         UpdateMusicStream(music);
@@ -463,11 +508,14 @@ int saida(PERSONAGEM *aluno, char grid[101][100]){
             
        
             //Desenha o player e o profeesor e o colega
-            drawGrid(grid, &aluno, professor.current);
+            drawGrid(grid, &aluno, professor.current, Scroll);
             
             
             //Desenha vida do Aluno
             DrawText(displayVidas, aluno.posx*20 - 390, aluno.posy*20 - 290, 30, RED);
+            
+            //Desenha creditos do Aluno
+            DrawText(displayCreditos, aluno.posx*20, aluno.posy*20 - 290, 30, BLUE);
         
         
             //Fundo Preto

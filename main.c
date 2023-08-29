@@ -22,10 +22,9 @@ int run()
         case 2: 
             scoreboard(); //carrega o scorboard
             break;
-        
-        //case 3: informacoes
+  
         case 3:
-            informacoes();
+            informacoes(); //mostra como jogar o jogo
             break;
 
         case 4: //saida, fecha o jogo
