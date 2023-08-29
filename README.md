@@ -17,4 +17,5 @@ pokemon Fire Red e Leaf Green.
 
 
 (As perguntas foram criadas por Gabriel Leal e eu nao tenho nada a ver com elas professor Santiago
--Ass Bernardo Toresan)
+-Ass Bernardo Toresan). O menu, explêndido e magnificamente grandioso de tão belo, também foram criadas
+pelo cordioso Gabriel Leal, vulgo Gabiru.
