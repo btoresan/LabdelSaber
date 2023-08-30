@@ -18,7 +18,7 @@ typedef struct {
 
 
 
-void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor, Texture2D Scroll){
+void drawGrid (char grid[101][100], PERSONAGEM *aluno, Texture2D professor, Texture2D Scroll){ // olha quadrado por quadrado e vai desenhando os elementos do mapa
     //variaveis para carregar o apenas o qudrante certo
     //de forma fluida
     int metadex = 0;
