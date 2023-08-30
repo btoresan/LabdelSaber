@@ -19,7 +19,7 @@ typedef struct
 
 
 
-void Win(){
+void Win(){ //tela verde vitória
 
     // Inicializacao
     const int screenWidth = 800;
