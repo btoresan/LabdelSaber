@@ -245,11 +245,11 @@ void ProximoNivel(int nivel, int vida){
     FILE *save;
     int um, ran1, ran2;
     
-    um = 1;
-    ran1 = GetRandomValue(10, 40);
-    ran2 = GetRandomValue(10, 30);
+    um = 1; // posição inicial do aluno
+    ran1 = GetRandomValue(10, 40); // posição x do prof
+    ran2 = GetRandomValue(10, 30); //posição y do prof
     
-    nivel++;
+    nivel++; // aumento o nivel
     
     save = fopen("static/save.bin", "r+b");
     
