@@ -12,7 +12,7 @@ int run()
         //opções do menu
 
         case 0:
-            Novojogo(0, 3);
+            Novojogo(0, 3); // envia o nivel e a vida inicial
             break;
 
         case 1: //carrega jogo
