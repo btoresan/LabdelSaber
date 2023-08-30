@@ -346,7 +346,7 @@ int labirinto (){
 
 
 //faz a chamado do labirinto no nivel certo;
-void Novojogo (int nivel, int vidas){
+void Novojogo (int nivel, int vidas){ //chama a função labirinto com vida 3 e nivel 0
     
     int zero, tres, um, ran1, ran2;
     FILE *save;
